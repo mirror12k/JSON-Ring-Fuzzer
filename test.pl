@@ -195,10 +195,10 @@ sub execute_file {
 		dump_file("$test_file.bak.$i", $bak);
 		my $res = `$proc`;
 		say "status: ", $? >> 8 if (($? >> 8) != 0);
-		return $proc if (($? >> 8) != 0 or slurp_file($test_file) eq '');
+		return $proc if (($? >> 8) != 0 or slurp_file($test_file) eq '' or slurp_file($test_file) =~ /\A\w+\Z/s);
 
 		`$ground_truth`;
-		return $proc if (($? >> 8) != 0 or slurp_file($test_file) eq '');
+		return $proc if (($? >> 8) != 0 or slurp_file($test_file) eq '' or slurp_file($test_file) =~ /\A\w+\Z/s);
 	}
 }
 # reduce_file performs cleaning operation, in this case removing all comments (modify as necessary to your language)
@@ -214,7 +214,7 @@ foreach my $i (1 .. 100000) {
 	# mutate the file
 	my $mutated_data = reduce_file(limit_file(mutate($data)));
 	# mutate the file until ground-truth accepts it
-	$mutated_data = reduce_file(limit_file(mutate($data))) while (($? >> 8) != 0 or $mutated_data eq '');
+	$mutated_data = reduce_file(limit_file(mutate($data))) while (($? >> 8) != 0 or $mutated_data eq '' or $mutated_data =~ /\A\w+\Z/s);
 	say "mutated_data: $mutated_data";
 
 	# process it through our processors
