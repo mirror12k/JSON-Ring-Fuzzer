@@ -27,12 +27,33 @@ sub mutate_byte {
 	return $data;
 }
 
+
+# mutators
+sub mutate_unicode {
+	my ($data) = @_;
+
+	my $to_p = int rand length $data;
+
+	substr($data, $to_p, 0) = sprintf "\\u%04X", rand(0x10000);
+
+	return $data;
+}
+
 my @insertions = (
-	'[],',
-	'[[]],',
-	'[{}],',
+	',[]',
+	',[[]]',
+	',[{}]',
+	',null',
+	'[]',
+	'[[]]',
+	'[{}]',
+	'null',
 	'"asdf",',
-	'"yes":"no",',
+	',"yes":"no"',
+	',"arr":["asdf"]',
+	',"bob":{"y":"n"}',
+	',"who?":[null,{}]',
+	',"n":null',
 	'\0\/\\\\',
 	'\b\r\n\t',
 	'\u00aa\u0000\u1234',
@@ -158,7 +179,7 @@ sub mutate {
 	my ($data) = @_;
 
 	# my @funs = (\&mutate_byte, \&mutate_substitution, \&mutate_bitflip, \&mutate_swap, \&mutate_multiply);
-	my @funs = (\&mutate_byte, \&mutate_insert, \&mutate_bitflip, \&mutate_swap, \&mutate_multiply);
+	my @funs = (\&mutate_byte, \&mutate_unicode, \&mutate_insert, \&mutate_bitflip, \&mutate_swap, \&mutate_multiply);
 
 	return rand_choice(@funs)->($data);
 }

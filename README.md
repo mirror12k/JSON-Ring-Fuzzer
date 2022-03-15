@@ -10,6 +10,10 @@ The goal of this application is to find ways to bypass filters which check speci
 
 ## PHP json_decode
 Put in a \xaa byte into a string, it will fail to parse the text
-## Newtonsoft JObject.Parse
+## JSON-java JObject.Parse
 Put in a space into a string, it just fails...
+## Python json.loads
+Put in a \x9c byte into a string, it will fail to parse the utf-8
+## Perl JSON::PP decode_json
+Put in a \x83 byte into a string, it will fail to parse the utf-8
 
